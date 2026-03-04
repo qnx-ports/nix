@@ -111,7 +111,8 @@ libc_enum! {
         #[cfg(not(any(linux_android, target_os = "emscripten",
                       target_os = "fuchsia", target_os = "redox",
                       target_os = "haiku", target_os = "aix",
-                      target_os = "solaris", target_os = "cygwin")))]
+                      target_os = "solaris", target_os = "cygwin",
+                      target_os = "nto")))]
         /// Information request
         SIGINFO,
     }
@@ -191,7 +192,8 @@ impl FromStr for Signal {
                 target_os = "aix",
                 target_os = "haiku",
                 target_os = "solaris",
-                target_os = "cygwin"
+                target_os = "cygwin",
+                target_os = "nto",
             )))]
             "SIGINFO" => Signal::SIGINFO,
             _ => return Err(Errno::EINVAL),
@@ -277,7 +279,8 @@ impl Signal {
                 target_os = "aix",
                 target_os = "haiku",
                 target_os = "solaris",
-                target_os = "cygwin"
+                target_os = "cygwin",
+                target_os = "nto"
             )))]
             Signal::SIGINFO => "SIGINFO",
         }
@@ -361,7 +364,7 @@ const SIGNALS: [Signal; 30] = [
     SIGURG, SIGPOLL, SIGIO, SIGSTOP, SIGTSTP, SIGCONT, SIGTTIN, SIGTTOU,
     SIGVTALRM, SIGPROF, SIGXCPU, SIGXFSZ, SIGTRAP,
 ];
-#[cfg(any(target_os = "solaris", target_os = "cygwin"))]
+#[cfg(any(target_os = "solaris", target_os = "cygwin", target_os = "nto"))]
 #[cfg(feature = "signal")]
 const SIGNALS: [Signal; 30] = [
     SIGHUP, SIGINT, SIGQUIT, SIGILL, SIGTRAP, SIGABRT, SIGBUS, SIGFPE, SIGKILL,
@@ -377,7 +380,8 @@ const SIGNALS: [Signal; 30] = [
     target_os = "redox",
     target_os = "haiku",
     target_os = "solaris",
-    target_os = "cygwin"
+    target_os = "cygwin",
+    target_os = "nto",
 )))]
 #[cfg(feature = "signal")]
 const SIGNALS: [Signal; 31] = [
@@ -454,12 +458,14 @@ libc_bitflags! {
         SA_NODEFER;
         /// The system will deliver the signal to the process on a signal stack,
         /// specified by each thread with sigaltstack(2).
+        #[cfg(not(target_os = "nto"))]
         SA_ONSTACK;
         /// The handler is reset back to the default at the moment the signal is
         /// delivered.
         SA_RESETHAND;
         /// Requests that certain system calls restart if interrupted by this
         /// signal.  See the man page for complete details.
+        #[cfg(not(target_os = "nto"))]
         SA_RESTART;
         /// This flag is controlled internally by Nix.
         SA_SIGINFO;
@@ -945,7 +951,9 @@ pub unsafe fn signal(signal: Signal, handler: SigHandler) -> Result<SigHandler> 
         SigHandler::SigDfl => unsafe { libc::signal(signal, libc::SIG_DFL) },
         SigHandler::SigIgn => unsafe { libc::signal(signal, libc::SIG_IGN) },
         SigHandler::Handler(handler) => unsafe { libc::signal(signal, handler as libc::sighandler_t) },
-        #[cfg(not(target_os = "redox"))]
+        #[cfg(target_os = "nto")]
+        SigHandler::SigAction(_) => return Err(Errno::EINVAL),
+        #[cfg(not(any(target_os = "redox", target_os = "nto")))]
         SigHandler::SigAction(_) => return Err(Errno::ENOTSUP),
     };
     Errno::result(res).map(|oldhandler| {
