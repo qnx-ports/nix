@@ -49,7 +49,7 @@ cfg_if! {
         unsafe fn errno_location() -> *mut c_int {
             unsafe { libc::_Errno() }
         }
-    } else if #[cfg(any(target_os = "nto"))] {
+    } else if #[cfg(any(target_os = "nto", target_os = "qnx"))] {
         unsafe fn errno_location() -> *mut c_int {
             unsafe { libc::__get_errno_ptr() }
         }
@@ -1090,7 +1090,7 @@ fn desc(errno: Errno) -> &'static str {
         EGRATUITOUS => "Gratuitous error",
 
         // TODO: actuall process QNX errors
-        #[cfg(target_os = "nto")]
+        #[cfg(any(target_os = "nto", target_os = "qnx"))]
         _ => "QNX decide to explode",
     }
 }
@@ -3866,7 +3866,7 @@ mod consts {
     }
 }
 
-#[cfg(target_os = "nto")]
+#[cfg(any(target_os = "nto", target_os = "qnx"))]
 mod consts {
     #[derive(Clone, Copy, Debug, Eq, PartialEq)]
     #[repr(i32)]
