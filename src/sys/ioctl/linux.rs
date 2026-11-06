@@ -5,8 +5,9 @@ use cfg_if::cfg_if;
     target_os = "android",
     target_os = "fuchsia",
     target_os = "cygwin",
+    target_os = "qnx",
     target_env = "musl",
-    target_env = "ohos"
+    target_env = "ohos",
 ))]
 #[doc(hidden)]
 pub type ioctl_num_type = ::libc::c_int;
@@ -14,6 +15,7 @@ pub type ioctl_num_type = ::libc::c_int;
     target_os = "android",
     target_os = "fuchsia",
     target_os = "cygwin",
+    target_os = "qnx",
     target_env = "musl",
     target_env = "ohos"
 )))]

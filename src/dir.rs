@@ -299,6 +299,7 @@ impl Entry {
                          target_os = "haiku",
                          target_os = "hurd",
                          target_os = "cygwin",
+                         target_os = "qnx",
                          solarish,
                          linux_android,
                          apple_targets))] {
@@ -308,7 +309,8 @@ impl Entry {
             }
         }
         cfg_if! {
-            if #[cfg(not(any(solarish, target_os = "aix", target_os = "haiku")))] {
+            // TODO: qnx use entra data to get this info
+            if #[cfg(not(any(solarish, target_os = "aix", target_os = "haiku", target_os = "qnx")))] {
                 let type_ = match de.d_type {
                     libc::DT_FIFO => Some(Type::Fifo),
                     libc::DT_CHR => Some(Type::CharacterDevice),
@@ -321,7 +323,7 @@ impl Entry {
                 };
             } else {
                 // illumos, Solaris, and Haiku systems do not have the d_type member at all:
-                #[cfg(any(solarish, target_os = "aix", target_os = "haiku"))]
+                #[cfg(any(solarish, target_os = "aix", target_os = "haiku", target_os = "qnx"))]
                 let type_ = None;
             }
         }

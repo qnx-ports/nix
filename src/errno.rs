@@ -920,7 +920,8 @@ fn desc(errno: Errno) -> &'static str {
             solarish,
             target_os = "haiku",
             target_os = "hurd",
-            target_os = "cygwin"
+            target_os = "cygwin",
+            target_os = "qnx"
         ))]
         ENOTSUP => "Operation not supported",
 
@@ -3885,6 +3886,7 @@ mod consts {
         ENXIO = libc::ENXIO,
         E2BIG = libc::E2BIG,
         ENOEXEC = libc::ENOEXEC,
+        ENOTSUP = libc::ENOTSUP,
         EBADF = libc::EBADF,
         ECHILD = libc::ECHILD,
         EAGAIN = libc::EAGAIN,
@@ -4016,6 +4018,7 @@ mod consts {
         use self::Errno::*;
 
         match e {
+            libc::ENOTSUP => ENOTSUP,
             libc::EPERM => EPERM,
             libc::ENOENT => ENOENT,
             libc::ESRCH => ESRCH,

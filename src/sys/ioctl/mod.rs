@@ -231,7 +231,8 @@ use cfg_if::cfg_if;
     linux_android,
     target_os = "fuchsia",
     target_os = "redox",
-    target_os = "cygwin"
+    target_os = "cygwin",
+    target_os = "qnx",
 ))]
 #[macro_use]
 mod linux;
@@ -240,7 +241,8 @@ mod linux;
     linux_android,
     target_os = "fuchsia",
     target_os = "redox",
-    target_os = "cygwin"
+    target_os = "cygwin",
+    target_os = "qnx"
 ))]
 pub use self::linux::*;
 

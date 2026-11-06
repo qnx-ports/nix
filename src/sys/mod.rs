@@ -41,6 +41,7 @@ feature! {
     target_os = "fuchsia",
     target_os = "redox",
     target_os = "cygwin",
+    target_os = "qnx"
 ))]
 #[cfg(feature = "ioctl")]
 #[cfg_attr(docsrs, doc(cfg(feature = "ioctl")))]

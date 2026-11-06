@@ -104,6 +104,7 @@ mod os {
         target_os = "illumos",      // Since ???
         target_os = "redox",        // Since 1-july-2020
         target_os = "cygwin",
+        target_os = "qnx",
 ))]
 mod os {
     /// Check if the OS supports atomic close-on-exec for sockets

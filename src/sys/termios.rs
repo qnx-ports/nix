@@ -299,7 +299,7 @@ libc_enum! {
         B115200,
         #[cfg(solarish)]
         B153600,
-        #[cfg(not(target_os = "aix"))]
+        #[cfg(not(any(target_os = "aix", target_os = "qnx")))]
         B230400,
         #[cfg(solarish)]
         B307200,
@@ -642,7 +642,7 @@ libc_bitflags! {
         PARODD;
         HUPCL;
         CLOCAL;
-        #[cfg(not(any(target_os = "redox", target_os = "aix")))]
+        #[cfg(not(any(target_os = "redox", target_os = "aix", target_os = "qnx")))]
         CRTSCTS;
         #[cfg(linux_android)]
         CBAUD;
@@ -686,7 +686,7 @@ libc_bitflags! {
         ECHOK;
         ECHO;
         ECHONL;
-        #[cfg(not(any(target_os = "redox", target_os = "cygwin")))]
+        #[cfg(not(any(target_os = "redox", target_os = "cygwin", target_os = "qnx")))]
         ECHOPRT;
         #[cfg(not(target_os = "redox"))]
         ECHOCTL;
@@ -695,20 +695,21 @@ libc_bitflags! {
         #[cfg(bsd)]
         ALTWERASE;
         IEXTEN;
-        #[cfg(not(any(target_os = "redox", target_os = "haiku", target_os = "aix", target_os = "cygwin")))]
+        #[cfg(not(any(target_os = "redox", target_os = "haiku", target_os = "aix", target_os = "cygwin", target_os = "qnx")))]
         EXTPROC;
         TOSTOP;
-        #[cfg(not(target_os = "redox"))]
+        #[cfg(not(any(target_os = "redox", target_os = "qnx")))]
         FLUSHO;
         #[cfg(bsd)]
         NOKERNINFO;
-        #[cfg(not(any(target_os = "redox", target_os = "cygwin")))]
+        #[cfg(not(any(target_os = "redox", target_os = "cygwin", target_os = "qnx")))]
         PENDIN;
         NOFLSH;
         #[cfg(any(linux_android,
                   target_os = "aix",
                   target_os = "haiku",
-                  target_os = "nto"))]
+                  target_os = "nto",
+                  target_os = "qnx"))]
         XCASE;
     }
 }
